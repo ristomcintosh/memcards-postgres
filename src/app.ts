@@ -4,7 +4,7 @@ import helmet from 'helmet';
 import cors from 'cors';
 import morgan from 'morgan';
 import Controller from './main.controller';
-import DataService from './services/mongo/mongo.service';
+import DataService from './services/postgres';
 import errorHandler from './middleware/errorHandler';
 
 class App {

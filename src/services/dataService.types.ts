@@ -16,6 +16,11 @@ export interface DataService {
     res: Response,
     next: NextFunction
   ): Promise<void | Response> | void;
+  getDeck(
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ): Promise<void | Response> | void;
   createDeck(
     req: Request,
     res: Response,
