@@ -16,7 +16,6 @@ class App {
     this.app = express();
     this.controller = new Controller(new DataService());
     this.setConfig();
-    DataService.config();
   }
 
   private setConfig(): void {

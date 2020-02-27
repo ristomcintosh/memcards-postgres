@@ -1,6 +1,5 @@
 import Joi from '@hapi/joi';
-import { User } from '../mongo/models/user.model';
-import { Flashcard } from '../mongo/models/flashcard.model';
+import { Flashcard, User } from '../flashcard.types';
 
 function validateUser(user: User) {
   const schema = Joi.object({
