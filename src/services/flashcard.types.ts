@@ -1,8 +1,7 @@
 export interface Flashcard {
-  _id: number;
   front: string;
   back: string;
-  image?: {
+  image: {
     src: string;
     alt: string;
     thumb: string;

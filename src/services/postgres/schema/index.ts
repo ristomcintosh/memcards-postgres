@@ -1,32 +1,34 @@
-export interface Flashcards {
+interface Flashcards {
   id: string;
   front: string;
   back: string;
-  image_id: string;
+  image_id: string | null;
   deck_id: string;
 }
 
-export interface Users {
+interface Users {
   id: string;
   email: string;
   name: string;
 }
 
-export interface Login {
+interface Login {
   id: string;
   email: string;
   hash: string;
 }
 
-export interface Decks {
+interface Decks {
   id: string;
   deckName: string;
   user_id: string;
 }
 
-export interface Images {
+interface Images {
   id: string;
   src: string;
   alt: string;
   thumb: string;
 }
+
+export { Flashcards, Users, Login, Decks, Images };
