@@ -1,5 +1,6 @@
 interface Flashcards {
   id: string;
+  cardId: string;
   front: string;
   back: string;
   image_id: string | null;

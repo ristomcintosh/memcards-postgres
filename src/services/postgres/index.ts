@@ -6,6 +6,7 @@ import * as Schema from './schema';
 import tokenGenerator from '../tokenGenerator';
 import { Flashcard, Deck } from '../flashcard.types';
 import Knex from 'knex';
+import { addImageToDB } from './queryHelper';
 require('dotenv').config();
 
 export default class PostgresService implements DataService {
@@ -82,8 +83,36 @@ export default class PostgresService implements DataService {
       next(error);
     }
   }
-  getDeck(req: Request, res: Response, next: NextFunction) {
-    throw new Error('Method not implemented.');
+  async getDeck(req: Request, res: Response, next: NextFunction) {
+    try {
+      const deck = await postgres<Schema.Flashcards>('flashcards')
+        .select('*', 'flashcards.id as cardId')
+        .leftJoin<Schema.Images>('images', 'images.id', 'flashcards.image_id')
+        .where('deck_id', req.params.deckId);
+
+      function deckObjectFactory({
+        cardId,
+        src,
+        alt,
+        thumb,
+        front,
+        back
+      }: Schema.Flashcards & Schema.Images) {
+        return {
+          cardId,
+          front,
+          back,
+          image: src && {
+            src,
+            alt,
+            thumb
+          }
+        };
+      }
+      res.send(deck.map(deckObjectFactory)).status(200);
+    } catch (error) {
+      next(error);
+    }
   }
   async createDeck(req: Request, res: Response, next: NextFunction) {
     const newDeckName = req.body.deckName;
@@ -101,7 +130,7 @@ export default class PostgresService implements DataService {
             user_id: req.query.userId
           })
           .returning('id');
-        const imageId = await this.addImageToDB(newCard, trx);
+        const imageId = await addImageToDB(newCard, trx);
         const flashcardId = await trx<Schema.Flashcards>('flashcards')
           .insert({
             front: newCard.front,
@@ -117,16 +146,6 @@ export default class PostgresService implements DataService {
     }
   }
 
-  private async addImageToDB(newCard: Flashcard, trx: Knex) {
-    let result = null;
-    if (newCard.image !== null) {
-      result = await trx<Schema.Images>('images')
-        .insert(newCard.image)
-        .returning('id');
-    }
-    return result;
-  }
-
   deleteDeck(req: Request, res: Response, next: NextFunction) {
     throw new Error('Method not implemented.');
   }
@@ -140,7 +159,7 @@ export default class PostgresService implements DataService {
 
     try {
       await postgres.transaction(async trx => {
-        const imageId = await this.addImageToDB(newCard, trx);
+        const imageId = await addImageToDB(newCard, trx);
         const flashcardId = await trx<Schema.Flashcards>('flashcards')
           .insert({
             front: newCard.front,

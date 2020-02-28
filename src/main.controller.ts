@@ -25,6 +25,7 @@ export default class Controller {
       login,
       createUser,
       getAllDecks,
+      getDeck,
       createCard,
       editCard,
       deleteDeck,
@@ -37,6 +38,7 @@ export default class Controller {
     router.post('/register', validateUser, createUser);
     router.get('/decks', auth, getAllDecks);
     router.post('/deck', auth, validateDeckName, validateFlashcard, createDeck);
+    router.get('/deck/:deckId', auth, getDeck);
     router.delete('/deck/:deckId', auth, deleteDeck);
     router.post('/card', auth, validateFlashcard, createCard);
     router.put('/card/:cardId', auth, validateFlashcard, editCard);
