@@ -68,11 +68,16 @@ export default class PostgresService implements DataService {
   }
   async getAllDecks(req: Request, res: Response, next: NextFunction) {
     try {
-      const decks = await postgres('decks')
-        .join('flashcards', 'decks.id', 'flashcards.deck_id')
+      const decksIdColumnIdentifier = postgres.ref('decks.id');
+      const flashcardCountQuery = postgres<Schema.Flashcards>('flashcards')
+        .count('*')
+        .where('deck_id', decksIdColumnIdentifier)
+        .as('cardCount');
+      const decks = await postgres<Schema.Decks>('decks')
+        .select('deckName', 'id', flashcardCountQuery)
         .where('user_id', req.query.userId);
 
-      console.log(decks);
+      res.send(decks).status(200);
     } catch (error) {
       next(error);
     }
