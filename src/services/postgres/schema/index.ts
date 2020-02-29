@@ -1,10 +1,13 @@
 interface Flashcards {
-  id: string;
-  cardId: string;
+  id?: string;
+  cardId?: string;
   front: string;
   back: string;
-  image_id: string | null;
-  deck_id: string;
+  image_id?: string | null;
+  deck_id?: string;
+  image_src?: string;
+  image_alt?: string;
+  image_thumb?: string;
 }
 
 interface Users {
@@ -25,11 +28,4 @@ interface Decks {
   user_id: string;
 }
 
-interface Images {
-  id: string;
-  src: string;
-  alt: string;
-  thumb: string;
-}
-
-export { Flashcards, Users, Login, Decks, Images };
+export { Flashcards, Users, Login, Decks };

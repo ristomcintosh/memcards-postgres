@@ -1,13 +1,21 @@
 import { Flashcard } from '../flashcard.types';
 import Knex = require('knex');
 import * as Schema from './schema';
+import * as ObjFactory from './objFactory';
 
-export async function addImageToDB(newCard: Flashcard, trx: Knex) {
-  let result = null;
-  if (newCard.image !== null) {
-    result = await trx<Schema.Images>('images')
-      .insert(newCard.image)
-      .returning('id');
-  }
+async function addFlashcardToDB(
+  deckId: string,
+  newCard: Flashcard,
+  postgres: Knex
+) {
+  const result = await postgres<Schema.Flashcards>('flashcards')
+    .insert({
+      deck_id: deckId,
+      ...ObjFactory.flashcardObjForDB(newCard)
+    })
+    .returning('id');
+
   return result;
 }
+
+export { addFlashcardToDB };

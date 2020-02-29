@@ -1,11 +1,12 @@
 export interface Flashcard {
+  cardId?: string;
   front: string;
   back: string;
   image: {
-    src: string;
-    alt: string;
-    thumb: string;
-  };
+    src?: string;
+    alt?: string;
+    thumb?: string;
+  } | null;
 }
 
 export interface User {

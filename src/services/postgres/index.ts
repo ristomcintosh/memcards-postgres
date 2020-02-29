@@ -6,7 +6,8 @@ import * as Schema from './schema';
 import tokenGenerator from '../tokenGenerator';
 import { Flashcard, Deck } from '../flashcard.types';
 import Knex from 'knex';
-import { addImageToDB } from './queryHelper';
+import * as ObjFactory from './objFactory';
+import * as QueryHelper from './queryHelper';
 require('dotenv').config();
 
 export default class PostgresService implements DataService {
@@ -85,60 +86,30 @@ export default class PostgresService implements DataService {
   }
   async getDeck(req: Request, res: Response, next: NextFunction) {
     try {
-      const deck = await postgres<Schema.Flashcards>('flashcards')
-        .select('*', 'flashcards.id as cardId')
-        .leftJoin<Schema.Images>('images', 'images.id', 'flashcards.image_id')
+      const flashcards = await postgres<Schema.Flashcards>('flashcards')
+        .select('*')
         .where('deck_id', req.params.deckId);
-
-      function deckObjectFactory({
-        cardId,
-        src,
-        alt,
-        thumb,
-        front,
-        back
-      }: Schema.Flashcards & Schema.Images) {
-        return {
-          cardId,
-          front,
-          back,
-          image: src && {
-            src,
-            alt,
-            thumb
-          }
-        };
-      }
-      res.send(deck.map(deckObjectFactory)).status(200);
+      res.send(flashcards.map(ObjFactory.flashcardObjForClient)).status(200);
     } catch (error) {
       next(error);
     }
   }
   async createDeck(req: Request, res: Response, next: NextFunction) {
-    const newDeckName = req.body.deckName;
-    const newCard = {
-      front: req.body.card.front,
-      back: req.body.card.back,
-      image: req.body.card.image
-    };
-
     try {
       await postgres.transaction(async trx => {
         const deckId = await trx<Schema.Decks>('decks')
           .insert({
-            deckName: newDeckName,
+            deckName: req.body.deckName,
             user_id: req.query.userId
           })
           .returning('id');
-        const imageId = await addImageToDB(newCard, trx);
-        const flashcardId = await trx<Schema.Flashcards>('flashcards')
-          .insert({
-            front: newCard.front,
-            back: newCard.back,
-            deck_id: deckId[0],
-            image_id: imageId ? imageId[0] : null
-          })
-          .returning('id');
+
+        const flashcardId = await QueryHelper.addFlashcardToDB(
+          deckId[0],
+          req.body.card,
+          trx
+        );
+
         return res.send({ cardId: flashcardId[0] }).status(201);
       });
     } catch (error) {
@@ -151,26 +122,14 @@ export default class PostgresService implements DataService {
   }
 
   async createCard(req: Request, res: Response, next: NextFunction) {
-    const newCard = {
-      front: req.body.card.front,
-      back: req.body.card.back,
-      image: req.body.card.image
-    };
-
     try {
-      await postgres.transaction(async trx => {
-        const imageId = await addImageToDB(newCard, trx);
-        const flashcardId = await trx<Schema.Flashcards>('flashcards')
-          .insert({
-            front: newCard.front,
-            back: newCard.back,
-            deck_id: req.query.deckId,
-            image_id: imageId ? imageId[0] : null
-          })
-          .returning('id');
+      const flashcardId = await QueryHelper.addFlashcardToDB(
+        req.query.deckId,
+        req.body.card,
+        postgres
+      );
 
-        res.status(201).send({ cardId: flashcardId[0] });
-      });
+      res.status(201).send({ cardId: flashcardId[0] });
     } catch (error) {
       next(error);
     }
