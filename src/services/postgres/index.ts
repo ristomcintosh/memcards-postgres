@@ -124,7 +124,7 @@ export default class PostgresService implements DataService {
   async createCard(req: Request, res: Response, next: NextFunction) {
     try {
       const flashcardId = await QueryHelper.addFlashcardToDB(
-        req.query.deckId,
+        req.params.deckId,
         req.body.card,
         postgres
       );
@@ -134,8 +134,19 @@ export default class PostgresService implements DataService {
       next(error);
     }
   }
-  editCard(req: Request, res: Response, next: NextFunction) {
-    throw new Error('Method not implemented.');
+  async editCard(req: Request, res: Response, next: NextFunction) {
+    console.log(req.params.deckId.trim());
+    try {
+      await postgres<Schema.Flashcards>('flashcards')
+        .update(ObjFactory.flashcardObjForDB(req.body.card))
+        .where({
+          deck_id: req.params.deckId,
+          id: req.params.cardId
+        });
+      res.send('card updated!').status(201);
+    } catch (error) {
+      next(error);
+    }
   }
   deleteCard(req: Request, res: Response, next: NextFunction) {
     throw new Error('Method not implemented.');

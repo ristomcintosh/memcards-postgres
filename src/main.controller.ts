@@ -40,9 +40,9 @@ export default class Controller {
     router.post('/deck', auth, validateDeckName, validateFlashcard, createDeck);
     router.get('/deck/:deckId', auth, getDeck);
     router.delete('/deck/:deckId', auth, deleteDeck);
-    router.post('/card', auth, validateFlashcard, createCard);
-    router.put('/card/:cardId', auth, validateFlashcard, editCard);
-    router.delete('/card/:cardId', auth, deleteCard);
+    router.post('/deck/:deckId/card', auth, validateFlashcard, createCard);
+    router.put('/deck/:deckId/card/:cardId', auth, validateFlashcard, editCard);
+    router.delete('/deck/:deckId/card/:cardId', auth, deleteCard);
     router.get('/images', auth, unsplash);
   }
 }
