@@ -24,7 +24,7 @@ interface Login {
 
 interface Decks {
   id: string;
-  deckName: string;
+  name: string;
   user_id: string;
 }
 
