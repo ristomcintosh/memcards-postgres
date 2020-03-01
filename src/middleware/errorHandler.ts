@@ -13,7 +13,7 @@ export default function errorHandler(
 
   if (err instanceof ClientError) {
     const error = (err as unknown) as ClientError;
-    return res.status(404).send(error.message);
+    return res.status(error.statusCode).send(error.message);
   }
 
   console.log(err);
