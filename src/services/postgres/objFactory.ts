@@ -22,7 +22,7 @@ const flashcardObjForClient = ({
   back
 }: Schema.Flashcards): Flashcard => {
   return {
-    cardId: id,
+    id,
     front,
     back,
     image: image_src
@@ -34,13 +34,5 @@ const flashcardObjForClient = ({
       : null
   };
 };
-
-// ...(image_src && {
-//   image: {
-//     src: image_src,
-//     alt: image_alt,
-//     thumb: image_thumb
-//   }
-// })
 
 export { flashcardObjForDB, flashcardObjForClient };

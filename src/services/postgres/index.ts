@@ -136,7 +136,7 @@ export default class PostgresService implements DataService {
     try {
       const flashcardId = await QueryHelper.addFlashcardToDB(
         req.params.deckId,
-        req.body.card,
+        req.body,
         postgres
       );
 
@@ -148,7 +148,7 @@ export default class PostgresService implements DataService {
   async editCard(req: Request, res: Response, next: NextFunction) {
     try {
       await postgres<Schema.Flashcards>('flashcards')
-        .update(ObjFactory.flashcardObjForDB(req.body.card))
+        .update(ObjFactory.flashcardObjForDB(req.body))
         .where({
           deck_id: req.params.deckId,
           id: req.params.cardId
