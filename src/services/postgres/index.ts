@@ -2,10 +2,8 @@ import bcrypt from 'bcrypt';
 import { DataService } from '../dataService.types';
 import { Request, Response, NextFunction } from 'express';
 import postgres from './databaseConnect';
-import * as Schema from './schema';
 import tokenGenerator from '../tokenGenerator';
-import { Flashcard, Deck } from '../flashcard.types';
-import Knex from 'knex';
+import * as Schema from './schema';
 import * as ObjFactory from './objFactory';
 import * as QueryHelper from './queryHelper';
 require('dotenv').config();
@@ -117,8 +115,21 @@ export default class PostgresService implements DataService {
     }
   }
 
-  deleteDeck(req: Request, res: Response, next: NextFunction) {
-    throw new Error('Method not implemented.');
+  async deleteDeck(req: Request, res: Response, next: NextFunction) {
+    try {
+      await postgres.transaction(async trx => {
+        await trx<Schema.Flashcards>('flashcards')
+          .where('deck_id', req.params.deckId)
+          .del();
+
+        await trx<Schema.Decks>('decks')
+          .where('id', req.params.deckId)
+          .del();
+      });
+      res.send('deck deleted').status(200);
+    } catch (error) {
+      next(error);
+    }
   }
 
   async createCard(req: Request, res: Response, next: NextFunction) {
@@ -135,7 +146,6 @@ export default class PostgresService implements DataService {
     }
   }
   async editCard(req: Request, res: Response, next: NextFunction) {
-    console.log(req.params.deckId.trim());
     try {
       await postgres<Schema.Flashcards>('flashcards')
         .update(ObjFactory.flashcardObjForDB(req.body.card))
@@ -148,7 +158,17 @@ export default class PostgresService implements DataService {
       next(error);
     }
   }
-  deleteCard(req: Request, res: Response, next: NextFunction) {
-    throw new Error('Method not implemented.');
+  async deleteCard(req: Request, res: Response, next: NextFunction) {
+    try {
+      await postgres<Schema.Flashcards>('flashcards')
+        .del()
+        .where({
+          deck_id: req.params.deckId,
+          id: req.params.cardId
+        });
+      res.send('card deleted').status(200);
+    } catch (error) {
+      next(error);
+    }
   }
 }
