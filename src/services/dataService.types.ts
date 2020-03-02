@@ -6,6 +6,7 @@ export interface DataService {
     res: Response,
     next: NextFunction
   ): Promise<void | Response> | void;
+  logout(req: Request, res: Response): Promise<void | Response> | void;
   createUser(
     req: Request,
     res: Response,

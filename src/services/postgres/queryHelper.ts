@@ -8,14 +8,10 @@ async function addFlashcardToDB(
   newCard: Flashcard,
   postgres: Knex
 ) {
-  const result = await postgres<Schema.Flashcards>('flashcards')
-    .insert({
-      deck_id: deckId,
-      ...ObjFactory.flashcardObjForDB(newCard)
-    })
-    .returning('id');
-
-  return result;
+  await postgres<Schema.Flashcards>('flashcards').insert({
+    deck_id: deckId,
+    ...ObjFactory.flashcardObjForDB(newCard)
+  });
 }
 
 export { addFlashcardToDB };
