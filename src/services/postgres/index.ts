@@ -37,6 +37,10 @@ export default class PostgresService implements DataService {
     }
   }
 
+  logout(req: Request, res: Response) {
+    res.clearCookie('webToken').send();
+  }
+
   async createUser(req: Request, res: Response, next: NextFunction) {
     try {
       const emailExist = await postgres<Schema.Users>('users').where(
@@ -102,13 +106,9 @@ export default class PostgresService implements DataService {
           })
           .returning('id');
 
-        const flashcardId = await QueryHelper.addFlashcardToDB(
-          deckId[0],
-          req.body.card,
-          trx
-        );
+        await QueryHelper.addFlashcardToDB(deckId[0], req.body.card, trx);
 
-        return res.send({ cardId: flashcardId[0] }).status(201);
+        return res.send(deckId[0]).status(201);
       });
     } catch (error) {
       next(error);
@@ -134,13 +134,9 @@ export default class PostgresService implements DataService {
 
   async createCard(req: Request, res: Response, next: NextFunction) {
     try {
-      const flashcardId = await QueryHelper.addFlashcardToDB(
-        req.params.deckId,
-        req.body,
-        postgres
-      );
+      await QueryHelper.addFlashcardToDB(req.params.deckId, req.body, postgres);
 
-      res.status(201).send({ cardId: flashcardId[0] });
+      res.status(201).send('card created!');
     } catch (error) {
       next(error);
     }

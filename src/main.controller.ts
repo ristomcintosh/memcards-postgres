@@ -23,6 +23,7 @@ export default class Controller {
   private routes() {
     const {
       login,
+      logout,
       createUser,
       getAllDecks,
       getDeck,
@@ -35,6 +36,7 @@ export default class Controller {
     const { router } = this;
 
     router.post('/login', validateLogin, login);
+    router.post('/logout', logout);
     router.post('/register', validateUser, createUser);
     router.get('/decks', auth, getAllDecks);
     router.post('/deck', auth, validateDeckName, validateFlashcard, createDeck);
