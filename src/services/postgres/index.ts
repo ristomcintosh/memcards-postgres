@@ -15,7 +15,6 @@ export default class PostgresService implements DataService {
         .innerJoin<Schema.Login>('login', 'users.email', 'login.email')
         .where('users.email', req.body.email)
         .first();
-      console.log('user :', user);
       if (!user) return res.status(400).send('email or password is incorrect');
 
       const validPassword = await bcrypt.compare(req.body.password, user.hash);

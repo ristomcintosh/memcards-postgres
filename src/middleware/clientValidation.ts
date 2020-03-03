@@ -7,7 +7,6 @@ function validatedResponse(
   res: Response,
   next: NextFunction
 ) {
-  console.log('clientValidation', error);
   return !error ? next() : res.status(400).send(error.details[0].message);
 }
 
