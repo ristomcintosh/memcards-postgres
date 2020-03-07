@@ -6,6 +6,7 @@ import morgan from 'morgan';
 import Controller from './main.controller';
 import DataService from './services/postgres';
 import errorHandler from './middleware/errorHandler';
+import routeToFrontEnd from './utils/routeToFrontEnd';
 
 class App {
   public app: Application;
@@ -29,6 +30,7 @@ class App {
       morgan(':method :url :status :res[content-length] - :response-time ms')
     );
     app.use('/api', this.controller.router);
+    routeToFrontEnd(app);
     app.use(errorHandler);
   }
 }
