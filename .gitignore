@@ -5,6 +5,7 @@
 
 # production
 /dist
+/client
 
 # misc
 .DS_Store
