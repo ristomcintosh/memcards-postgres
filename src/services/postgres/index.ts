@@ -6,6 +6,7 @@ import tokenGenerator from '../tokenGenerator';
 import * as Schema from './schema';
 import * as ObjFactory from './objFactory';
 import * as QueryHelper from './queryHelper';
+import { Transaction } from 'knex';
 require('dotenv').config();
 
 export default class PostgresService implements DataService {
@@ -50,7 +51,7 @@ export default class PostgresService implements DataService {
       if (emailExist.length)
         return res.status(400).send('email is already in use');
 
-      await postgres.transaction(async trx => {
+      await postgres.transaction(async (trx: Transaction) => {
         await trx<Schema.Login>('login').insert({
           email: req.body.email,
           hash: await bcrypt.hash(req.body.password, 10)
@@ -97,7 +98,7 @@ export default class PostgresService implements DataService {
   }
   async createDeck(req: Request, res: Response, next: NextFunction) {
     try {
-      await postgres.transaction(async trx => {
+      await postgres.transaction(async (trx: Transaction) => {
         const deckId = await trx<Schema.Decks>('decks')
           .insert({
             name: req.body.deckName,
@@ -116,7 +117,7 @@ export default class PostgresService implements DataService {
 
   async deleteDeck(req: Request, res: Response, next: NextFunction) {
     try {
-      await postgres.transaction(async trx => {
+      await postgres.transaction(async (trx: Transaction) => {
         await trx<Schema.Flashcards>('flashcards')
           .where('deck_id', req.params.deckId)
           .del();
