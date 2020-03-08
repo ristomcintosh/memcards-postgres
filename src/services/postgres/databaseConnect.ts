@@ -8,6 +8,6 @@ export default knex({
     user: process.env.POSTGRES_USER,
     password: process.env.POSTGRES_PASSWORD,
     database: process.env.POSTGRES_DATABASE_NAME,
-    port: 5433
+    port: (process.env.POSTGRES_PORT as unknown) as number
   }
 });
