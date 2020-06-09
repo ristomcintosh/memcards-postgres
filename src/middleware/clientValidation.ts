@@ -3,7 +3,7 @@ import JoiValidator from '../services/joiValidation/validation';
 import { ValidationError } from '@hapi/joi';
 
 function validatedResponse(
-  error: ValidationError,
+  error: ValidationError | undefined,
   res: Response,
   next: NextFunction
 ) {

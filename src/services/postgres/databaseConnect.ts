@@ -11,3 +11,5 @@ export default knex({
     port: (process.env.POSTGRES_PORT as unknown) as number
   }
 });
+
+console.log(process.env.POSTGRES_DATABASE_NAME);

@@ -6,7 +6,7 @@ require('dotenv').config();
 
 export default function Auth(req: Request, res: Response, next: NextFunction) {
   const token: string = req.cookies.webToken;
-  const userId: string = req.query.userId;
+  const userId: string = req.query.userId as string;
   if (!token)
     return next(new ClientError('Access denied. No token provided.', 401));
   if (!userId) return next(new ClientError('No userId provided', 400));

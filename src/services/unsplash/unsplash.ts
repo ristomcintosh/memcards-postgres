@@ -17,11 +17,15 @@ const getImages = async (searchTerm: string, page: number) =>
   );
 
 export default async (req: Request, res: Response) => {
-  const { searchTerm, page } = req.query;
+  const { searchTerm, page } = (req.query as unknown) as {
+    searchTerm: string;
+    page: number;
+  };
   if (!searchTerm || !page)
     return res.status(400).send('Search term and page number is required');
+
   if (searchTerm.length < 3)
-    return res.status(400).send('Search term should be 3 or more chr');
+    return res.status(400).send('Search term should be 3 or more char');
   try {
     const images = await getImages(searchTerm, page);
     return res.status(200).json(images.data);

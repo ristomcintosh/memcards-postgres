@@ -79,7 +79,7 @@ export default class PostgresService implements DataService {
         .as('cardCount');
       const decks = await postgres<Schema.Decks>('decks')
         .select('name', 'id', flashcardCountQuery)
-        .where('user_id', req.query.userId);
+        .where('user_id', req.query.userId as string);
 
       res.send(decks).status(200);
     } catch (error) {
@@ -102,7 +102,7 @@ export default class PostgresService implements DataService {
         const deckId = await trx<Schema.Decks>('decks')
           .insert({
             name: req.body.deckName,
-            user_id: req.query.userId
+            user_id: req.query.userId as string
           })
           .returning('id');
 
