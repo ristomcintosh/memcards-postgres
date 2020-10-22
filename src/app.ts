@@ -30,7 +30,7 @@ class App {
       morgan(':method :url :status :res[content-length] - :response-time ms')
     );
     app.use('/api', this.controller.router);
-    routeToFrontEnd(app);
+    // routeToFrontEnd(app);
     app.use(errorHandler);
   }
 }

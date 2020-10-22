@@ -2,10 +2,10 @@
 -- PostgreSQL database dump
 --
 
--- Dumped from database version 12.1
--- Dumped by pg_dump version 12.1
+-- Dumped from database version 12.3
+-- Dumped by pg_dump version 12.3
 
--- Started on 2020-03-06 11:28:43
+-- Started on 2020-08-30 01:18:12
 
 SET statement_timeout = 0;
 SET lock_timeout = 0;
@@ -19,7 +19,7 @@ SET client_min_messages = warning;
 SET row_security = off;
 
 --
--- TOC entry 2 (class 3079 OID 16440)
+-- TOC entry 2 (class 3079 OID 16808)
 -- Name: uuid-ossp; Type: EXTENSION; Schema: -; Owner: -
 --
 
@@ -40,7 +40,7 @@ SET default_tablespace = '';
 SET default_table_access_method = heap;
 
 --
--- TOC entry 207 (class 1259 OID 16467)
+-- TOC entry 205 (class 1259 OID 16849)
 -- Name: decks; Type: TABLE; Schema: public; Owner: postgres
 --
 
@@ -54,7 +54,7 @@ CREATE TABLE public.decks (
 ALTER TABLE public.decks OWNER TO postgres;
 
 --
--- TOC entry 208 (class 1259 OID 16501)
+-- TOC entry 206 (class 1259 OID 16856)
 -- Name: flashcards; Type: TABLE; Schema: public; Owner: postgres
 --
 
@@ -72,7 +72,7 @@ CREATE TABLE public.flashcards (
 ALTER TABLE public.flashcards OWNER TO postgres;
 
 --
--- TOC entry 206 (class 1259 OID 16423)
+-- TOC entry 203 (class 1259 OID 16796)
 -- Name: login; Type: TABLE; Schema: public; Owner: postgres
 --
 
@@ -86,7 +86,7 @@ CREATE TABLE public.login (
 ALTER TABLE public.login OWNER TO postgres;
 
 --
--- TOC entry 205 (class 1259 OID 16421)
+-- TOC entry 207 (class 1259 OID 16863)
 -- Name: login_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
 --
 
@@ -103,7 +103,7 @@ ALTER TABLE public.login_id_seq OWNER TO postgres;
 
 --
 -- TOC entry 2866 (class 0 OID 0)
--- Dependencies: 205
+-- Dependencies: 207
 -- Name: login_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
 --
 
@@ -111,7 +111,7 @@ ALTER SEQUENCE public.login_id_seq OWNED BY public.login.id;
 
 
 --
--- TOC entry 204 (class 1259 OID 16397)
+-- TOC entry 204 (class 1259 OID 16802)
 -- Name: users; Type: TABLE; Schema: public; Owner: postgres
 --
 
@@ -125,7 +125,7 @@ CREATE TABLE public.users (
 ALTER TABLE public.users OWNER TO postgres;
 
 --
--- TOC entry 203 (class 1259 OID 16395)
+-- TOC entry 208 (class 1259 OID 16865)
 -- Name: users_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
 --
 
@@ -142,7 +142,7 @@ ALTER TABLE public.users_id_seq OWNER TO postgres;
 
 --
 -- TOC entry 2867 (class 0 OID 0)
--- Dependencies: 203
+-- Dependencies: 208
 -- Name: users_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
 --
 
@@ -150,7 +150,7 @@ ALTER SEQUENCE public.users_id_seq OWNED BY public.users.id;
 
 
 --
--- TOC entry 2717 (class 2604 OID 16426)
+-- TOC entry 2716 (class 2604 OID 16867)
 -- Name: login id; Type: DEFAULT; Schema: public; Owner: postgres
 --
 
@@ -158,7 +158,7 @@ ALTER TABLE ONLY public.login ALTER COLUMN id SET DEFAULT nextval('public.login_
 
 
 --
--- TOC entry 2716 (class 2604 OID 16400)
+-- TOC entry 2717 (class 2604 OID 16868)
 -- Name: users id; Type: DEFAULT; Schema: public; Owner: postgres
 --
 
@@ -166,7 +166,7 @@ ALTER TABLE ONLY public.users ALTER COLUMN id SET DEFAULT nextval('public.users_
 
 
 --
--- TOC entry 2729 (class 2606 OID 16475)
+-- TOC entry 2729 (class 2606 OID 16870)
 -- Name: decks decks_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -175,7 +175,7 @@ ALTER TABLE ONLY public.decks
 
 
 --
--- TOC entry 2731 (class 2606 OID 16509)
+-- TOC entry 2731 (class 2606 OID 16872)
 -- Name: flashcards flashcards_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -184,7 +184,7 @@ ALTER TABLE ONLY public.flashcards
 
 
 --
--- TOC entry 2725 (class 2606 OID 16433)
+-- TOC entry 2721 (class 2606 OID 16874)
 -- Name: login login_email_key; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -193,7 +193,7 @@ ALTER TABLE ONLY public.login
 
 
 --
--- TOC entry 2727 (class 2606 OID 16431)
+-- TOC entry 2723 (class 2606 OID 16876)
 -- Name: login login_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -202,7 +202,7 @@ ALTER TABLE ONLY public.login
 
 
 --
--- TOC entry 2721 (class 2606 OID 16407)
+-- TOC entry 2725 (class 2606 OID 16878)
 -- Name: users users_email_key; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -211,7 +211,7 @@ ALTER TABLE ONLY public.users
 
 
 --
--- TOC entry 2723 (class 2606 OID 16405)
+-- TOC entry 2727 (class 2606 OID 16880)
 -- Name: users users_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -220,7 +220,7 @@ ALTER TABLE ONLY public.users
 
 
 --
--- TOC entry 2732 (class 2606 OID 16478)
+-- TOC entry 2732 (class 2606 OID 16881)
 -- Name: decks decks_user_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -229,7 +229,7 @@ ALTER TABLE ONLY public.decks
 
 
 --
--- TOC entry 2733 (class 2606 OID 16515)
+-- TOC entry 2733 (class 2606 OID 16886)
 -- Name: flashcards flashcards_deck_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -237,7 +237,7 @@ ALTER TABLE ONLY public.flashcards
     ADD CONSTRAINT flashcards_deck_id_fkey FOREIGN KEY (deck_id) REFERENCES public.decks(id);
 
 
--- Completed on 2020-03-06 11:28:45
+-- Completed on 2020-08-30 01:18:12
 
 --
 -- PostgreSQL database dump complete
