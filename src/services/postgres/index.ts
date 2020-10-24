@@ -31,7 +31,11 @@ export default class PostgresService implements DataService {
           maxAge: TWELVE_HOURS
         })
         .status(200)
-        .send({ userName: user.name, userId: user.id });
+        .send({
+          userName: user.name,
+          userId: user.id,
+          token: tokenGenerator(user.id)
+        });
     } catch (error) {
       next(error);
     }
@@ -87,6 +91,11 @@ export default class PostgresService implements DataService {
     }
   }
   async getDeck(req: Request, res: Response, next: NextFunction) {
+    /* TODO return {
+          deckName: string,
+          cards: flashcards[]
+        };
+    */
     try {
       const flashcards = await postgres<Schema.Flashcards>('flashcards')
         .select('*')
@@ -122,9 +131,7 @@ export default class PostgresService implements DataService {
           .where('deck_id', req.params.deckId)
           .del();
 
-        await trx<Schema.Decks>('decks')
-          .where('id', req.params.deckId)
-          .del();
+        await trx<Schema.Decks>('decks').where('id', req.params.deckId).del();
       });
       res.send('deck deleted').status(200);
     } catch (error) {
@@ -156,12 +163,10 @@ export default class PostgresService implements DataService {
   }
   async deleteCard(req: Request, res: Response, next: NextFunction) {
     try {
-      await postgres<Schema.Flashcards>('flashcards')
-        .del()
-        .where({
-          deck_id: req.params.deckId,
-          id: req.params.cardId
-        });
+      await postgres<Schema.Flashcards>('flashcards').del().where({
+        deck_id: req.params.deckId,
+        id: req.params.cardId
+      });
       res.send('card deleted').status(200);
     } catch (error) {
       next(error);
