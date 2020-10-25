@@ -19,12 +19,14 @@ const flashcardObjForClient = ({
   image_alt,
   image_thumb,
   front,
+  deck_id,
   back
-}: Schema.Flashcards): Flashcard => {
+}: Schema.Flashcards) => {
   return {
     id,
     front,
     back,
+    deckId: deck_id,
     image: image_src
       ? {
           src: image_src,

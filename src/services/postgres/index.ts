@@ -91,16 +91,19 @@ export default class PostgresService implements DataService {
     }
   }
   async getDeck(req: Request, res: Response, next: NextFunction) {
-    /* TODO return {
-          deckName: string,
-          cards: flashcards[]
-        };
-    */
     try {
+      const deck = await postgres<Schema.Decks>('decks')
+        .where('id', req.params.deckId)
+        .first();
       const flashcards = await postgres<Schema.Flashcards>('flashcards')
         .select('*')
         .where('deck_id', req.params.deckId);
-      res.send(flashcards.map(ObjFactory.flashcardObjForClient)).status(200);
+      res
+        .send({
+          deckName: deck?.name,
+          cards: flashcards.map(ObjFactory.flashcardObjForClient)
+        })
+        .status(200);
     } catch (error) {
       next(error);
     }
@@ -150,13 +153,16 @@ export default class PostgresService implements DataService {
   }
   async editCard(req: Request, res: Response, next: NextFunction) {
     try {
-      await postgres<Schema.Flashcards>('flashcards')
+      const newCard = await postgres<Schema.Flashcards>('flashcards')
         .update(ObjFactory.flashcardObjForDB(req.body))
         .where({
           deck_id: req.params.deckId,
           id: req.params.cardId
-        });
-      res.send('card updated!').status(201);
+        })
+        .returning('*');
+      console.log(newCard);
+      if (!newCard) return res.send('server error').status(500);
+      res.send(ObjFactory.flashcardObjForClient(newCard[0])).status(201);
     } catch (error) {
       next(error);
     }
