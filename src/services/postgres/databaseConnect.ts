@@ -1,5 +1,14 @@
 import knex from 'knex';
+import { types } from 'pg';
 require('dotenv').config();
+
+/* 
+In Postgres, count() returns a string
+This function will cast it to an int
+*/
+types.setTypeParser(20, function (val) {
+  return parseInt(val);
+});
 
 export default knex({
   client: 'pg',

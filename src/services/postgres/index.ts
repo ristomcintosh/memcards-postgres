@@ -85,6 +85,7 @@ export default class PostgresService implements DataService {
         .select('name', 'id', flashcardCountQuery)
         .where('user_id', req.query.userId as string);
 
+      console.dir({ decks }, { depth: 10 });
       res.send(decks).status(200);
     } catch (error) {
       next(error);
